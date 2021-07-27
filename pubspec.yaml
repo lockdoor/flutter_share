@@ -34,6 +34,8 @@ dependencies:
   flutter_typeahead: ^3.2.0
   screenshot: ^1.2.3
   image_gallery_saver: ^1.6.9
+  share_plus: ^2.1.4
+  path_provider: ^2.0.2
 
 dev_dependencies:
   flutter_test:

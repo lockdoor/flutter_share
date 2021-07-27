@@ -32,8 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Share',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+              primarySwatch: Colors.blue, backgroundColor: Colors.white),
           //home: Login(),
           home: Home(tab: 2)),
     );

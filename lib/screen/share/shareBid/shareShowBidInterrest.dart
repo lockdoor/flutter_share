@@ -2,6 +2,10 @@
 //capture screenshot
 //https://www.youtube.com/watch?v=rABnaF-Xk3E
 
+//import 'dart:html';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/customer/customer.dart';
@@ -12,12 +16,18 @@ import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editInterest.dart';
+//import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ShareShowBidInterest extends StatefulWidget {
   final shareModel;
-  const ShareShowBidInterest({Key? key, required this.shareModel})
+  final title;
+  const ShareShowBidInterest(
+      {Key? key, required this.shareModel, required this.title})
       : super(key: key);
 
   @override
@@ -32,11 +42,13 @@ class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
   late ApiModel apiModel;
   int? adminFirstSequence;
   int? adminLastSequence;
+  ScreenshotController screenshotController = ScreenshotController();
   @override
   void initState() {
     super.initState();
     apiModel = context.read<ApiProvider>().api;
     shareModel = widget.shareModel;
+    //_requestPermission();
     // Provider.of<ShareCustomerProvider>(context, listen: false)
     //     .initData(apiModel, shareModel);
   }
@@ -58,24 +70,118 @@ class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
             : null;
       }
       return Scaffold(
-          body: Center(
-        child: Container(
-          width: 800,
-          child: Column(
-            children: [
-              Flexible(
-                child: ListView.builder(
+        appBar: AppBar(
+          title: Text('ชื่อวงแชร์: ${shareModel.name} - ${widget.title}'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  screenshotController
+                      .capture(delay: Duration(milliseconds: 10))
+                      .then((capturedImage) async {
+                    //showCapturedWidget(context, capturedImage!);
+                    shareCaptureWidget(capturedImage!);
+                  }).catchError((onError) {
+                    print(onError);
+                  });
+                },
+                icon: Icon(Icons.share))
+          ],
+        ),
+        body: content(shareCustomerModelList),
+        //backgroundColor: Colors.white,
+      );
+    });
+  }
+
+  Widget content(List<ShareCustomerModel> shareCustomerModelList) {
+    return SingleChildScrollView(
+      child: Screenshot(
+        controller: screenshotController,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Container(
+                  //color: Colors.white,
+                  child: Text(
+                    'ชื่อวงแชร์: ${shareModel.name} - ${widget.title}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Container(
+                  //color: Colors.white,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: shareCustomerModelList.length,
                     itemBuilder: (context, index) {
                       return myList(shareCustomerModelList, index);
-                    }),
-              ),
-            ],
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ));
-    });
+      ),
+    );
   }
+
+  Future<dynamic> showCapturedWidget(
+      BuildContext context, Uint8List capturedImage) {
+    return showDialog(
+      useSafeArea: false,
+      context: context,
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: Text("Captured widget screenshot"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  shareCaptureWidget(capturedImage);
+                },
+                icon: Icon(Icons.share))
+          ],
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: [Image.memory(capturedImage)],
+        )),
+        // child: capturedImage != null
+        //     ? Image.memory(capturedImage)
+        //     : Container()),
+      ),
+    );
+  }
+
+  Future<void> shareCaptureWidget(Uint8List imageBytes) async {
+    //await [Permission.storage].request();
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceAll('.', '_')
+        .replaceAll(':', '-');
+    final name = shareModel.name + time;
+    final directory = await getApplicationDocumentsDirectory();
+    final image = File('${directory.path}/$name.jpg');
+    image.writeAsBytesSync(imageBytes);
+    print(image);
+    await Share.shareFiles([image.path]);
+  }
+
+  // _requestPermission() async {
+  //   Map<Permission, PermissionStatus> statuses = await [
+  //     Permission.storage,
+  //   ].request();
+
+  //   final info = statuses[Permission.storage].toString();
+  //   print(info);
+  //   //_toastInfo(info);
+  // }
 
   Widget showDate(ShareCustomerModel shareCustomerModel) {
     if ((shareCustomerModel.sequence == adminFirstSequence ||
@@ -185,13 +291,10 @@ class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
     }
   }
 
-  ListTile myList(List<ShareCustomerModel> items, int index) {
-    ShareCustomerModel shareCustomerModel = items[index];
+  ListTile myList(List<ShareCustomerModel> shareCustomerModelList, int index) {
+    ShareCustomerModel shareCustomerModel = shareCustomerModelList[index];
     return ListTile(
-      leading: CircleAvatar(
-          child: showSequence(
-              shareCustomerModel) //Text(items[index].sequence.toString()),
-          ),
+      leading: CircleAvatar(child: showSequence(shareCustomerModel)),
       //ให้มีการเข้าไปเช็คว่ามีการเปียแชร์ไปหรือยังโดยมีการเช็คดอกเบี้ย และวันที่รับแชร์
       title: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,

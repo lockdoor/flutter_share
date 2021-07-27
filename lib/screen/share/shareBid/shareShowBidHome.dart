@@ -43,9 +43,9 @@ class _ShareShowBidHomeState extends State<ShareShowBidHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ชื่อวงแชร์: ${shareModel.name} - $title'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('ชื่อวงแชร์: ${shareModel.name} - $title'),
+      // ),
       body: myBody,
       bottomNavigationBar: Container(
         color: Colors.blue.shade300,
@@ -87,7 +87,10 @@ class _ShareShowBidHomeState extends State<ShareShowBidHome> {
 
   void shareShowBidInterest() {
     title = 'ดอกเบี้ย';
-    myBody = ShareShowBidInterest(shareModel: this.shareModel);
+    myBody = ShareShowBidInterest(
+      shareModel: this.shareModel,
+      title: this.title,
+    );
   }
 
   void shareShowBidPay() {
