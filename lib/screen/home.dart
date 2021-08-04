@@ -44,6 +44,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, CustomerProvider provider, child) {
       this.admin = context.watch<CustomerProvider>().admin;
+      //print('admin is ${admin?.nickName}');
       return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(

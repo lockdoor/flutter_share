@@ -4,13 +4,13 @@ import 'package:flutter_share/providers/bank.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
-import 'package:flutter_share/screen/home.dart';
+//import 'package:flutter_share/screen/home.dart';
 //import 'package:flutter_share/screen/customer/customerAdd.dart';
 //import 'package:flutter_share/screen/home.dart';
 import 'package:provider/provider.dart';
 //import 'package:flutter_share/screen/share/shareAddBid.dart';
 //import 'package:flutter_share/screen/share/shareAdd.dart';
-//import 'package:flutter_share/screen/login.dart';
+import 'package:flutter_share/screen/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
           title: 'Share',
           theme: ThemeData(
               primarySwatch: Colors.blue, backgroundColor: Colors.white),
-          //home: Login(),
-          home: Home(tab: 2)),
+          home: Login()),
+      //home: Home(tab: 2)),
     );
   }
 }

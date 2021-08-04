@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/screen/share/shareBid/shareAddBid.dart';
-import 'package:flutter_share/screen/share/shareAddInteresAfterReceive.dart';
+import 'package:flutter_share/screen/share/shareFollowInterest/ShareAddFollowInterest.dart';
 import 'package:provider/provider.dart';
 
 class ShareAdd extends StatefulWidget {
@@ -45,7 +45,7 @@ class _ShareAddState extends State<ShareAdd> {
   }
 
   Route routeShareInterestAfterRecrive() =>
-      MaterialPageRoute(builder: (context) => ShareAddInterestAfterReceive());
+      MaterialPageRoute(builder: (context) => ShareAddFollowInterest());
 
   Route routeShareAddBit() =>
       MaterialPageRoute(builder: (context) => ShareAddBid());

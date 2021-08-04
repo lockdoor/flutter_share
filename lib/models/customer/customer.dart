@@ -37,6 +37,7 @@ class CustomerModel {
   }
 
   static getAllCustomers(ApiModel apiModel) async {
+    print('เรียกฐานข้อมูลลูกค้าจาก model');
     final response = await http
         .get(
           Uri.parse(apiModel.getApiUri() + 'api/persons'),

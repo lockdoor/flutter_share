@@ -3,8 +3,8 @@
 //https://www.youtube.com/watch?v=rABnaF-Xk3E
 
 //import 'dart:html';
-import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:io';
+// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
@@ -17,11 +17,13 @@ import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editInterest.dart';
 //import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
+
+import '../../capture.dart';
 
 class ShareShowBidInterest extends StatefulWidget {
   final shareModel;
@@ -71,15 +73,20 @@ class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
       }
       return Scaffold(
         appBar: AppBar(
-          title: Text('ชื่อวงแชร์: ${shareModel.name} - ${widget.title}'),
+          title: Row(
+            children: [
+              Icon(Icons.filter_vintage_sharp),
+              Text(' : ' + shareModel.name)
+            ],
+          ),
           actions: [
             IconButton(
                 onPressed: () {
                   screenshotController
                       .capture(delay: Duration(milliseconds: 10))
                       .then((capturedImage) async {
-                    //showCapturedWidget(context, capturedImage!);
-                    shareCaptureWidget(capturedImage!);
+                    await Capture.shareCaptureWidget(
+                        capturedImage!, shareModel);
                   }).catchError((onError) {
                     print(onError);
                   });
@@ -131,57 +138,6 @@ class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
       ),
     );
   }
-
-  Future<dynamic> showCapturedWidget(
-      BuildContext context, Uint8List capturedImage) {
-    return showDialog(
-      useSafeArea: false,
-      context: context,
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: Text("Captured widget screenshot"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  shareCaptureWidget(capturedImage);
-                },
-                icon: Icon(Icons.share))
-          ],
-        ),
-        body: SingleChildScrollView(
-            child: Column(
-          children: [Image.memory(capturedImage)],
-        )),
-        // child: capturedImage != null
-        //     ? Image.memory(capturedImage)
-        //     : Container()),
-      ),
-    );
-  }
-
-  Future<void> shareCaptureWidget(Uint8List imageBytes) async {
-    //await [Permission.storage].request();
-    final time = DateTime.now()
-        .toIso8601String()
-        .replaceAll('.', '_')
-        .replaceAll(':', '-');
-    final name = shareModel.name + time;
-    final directory = await getApplicationDocumentsDirectory();
-    final image = File('${directory.path}/$name.jpg');
-    image.writeAsBytesSync(imageBytes);
-    print(image);
-    await Share.shareFiles([image.path]);
-  }
-
-  // _requestPermission() async {
-  //   Map<Permission, PermissionStatus> statuses = await [
-  //     Permission.storage,
-  //   ].request();
-
-  //   final info = statuses[Permission.storage].toString();
-  //   print(info);
-  //   //_toastInfo(info);
-  // }
 
   Widget showDate(ShareCustomerModel shareCustomerModel) {
     if ((shareCustomerModel.sequence == adminFirstSequence ||

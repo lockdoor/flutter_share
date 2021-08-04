@@ -1,27 +1,21 @@
-//import 'dart:convert';
-//import 'dart:io';
+//แชร์แบบดอกตาม
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_share/models/api.dart';
-//import 'package:flutter_share/models/customer/customer.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
-//import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/screen/home.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-//import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class ShareAddBid extends StatefulWidget {
-  const ShareAddBid({Key? key}) : super(key: key);
-
+class ShareAddFollowInterest extends StatefulWidget {
+  const ShareAddFollowInterest({Key? key}) : super(key: key);
   @override
-  _ShareAddBidState createState() => _ShareAddBidState();
+  _ShareAddFollowInterestState createState() => _ShareAddFollowInterestState();
 }
 
-class _ShareAddBidState extends State<ShareAddBid> {
+class _ShareAddFollowInterestState extends State<ShareAddFollowInterest> {
   late ApiModel apiModel;
   final ShareModel shareModel = ShareModel();
   GlobalKey<FormState> shareAddBitForm = GlobalKey<FormState>();
@@ -38,7 +32,7 @@ class _ShareAddBidState extends State<ShareAddBid> {
     toDay = DateTime.now();
     dateRunController.text = DateFormat('dd-MM-yyyy').format(toDay).toString();
     shareModel.dateRun = toDay;
-    shareModel.shareType = 'บิด';
+    shareModel.shareType = 'ดอกตาม';
   }
 
   @override
@@ -53,7 +47,7 @@ class _ShareAddBidState extends State<ShareAddBid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('สร้างแชร์แบบบิด')),
+      appBar: AppBar(title: Text('สร้างแชร์แบบดอกตาม')),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return GestureDetector(
@@ -96,8 +90,8 @@ class _ShareAddBidState extends State<ShareAddBid> {
                               initialValue: '0',
                               onSaved: (value) =>
                                   shareModel.fee = int.parse(value.toString()),
-                              validator: (value) =>
-                                  checkNum(value, 'จำเป็นต้องใส่บิดเริ่มต้น'),
+                              validator: (value) => checkNum(
+                                  value, 'จำเป็นต้องใส่ค่าดูแลเริ่มต้น'),
                               decoration: InputDecoration(labelText: 'ค่าดูแล'),
                               keyboardType: TextInputType.number,
                             )),
@@ -166,6 +160,19 @@ class _ShareAddBidState extends State<ShareAddBid> {
                                   InputDecoration(labelText: 'ส่งมือละ'),
                               keyboardType: TextInputType.number,
                             )),
+                        //ดอกเบี้ย
+                        ListTile(
+                            leading: Icon(Icons.filter_vintage_sharp),
+                            title: TextFormField(
+                              //initialValue: '0',
+                              onSaved: (value) => shareModel.interestFix =
+                                  int.parse(value.toString()),
+                              validator: (value) =>
+                                  checkNum(value, 'จำเป็นต้องใส่ดอกเบี้ย'),
+                              decoration:
+                                  InputDecoration(labelText: 'ดอกเบี้ย'),
+                              keyboardType: TextInputType.number,
+                            )),
                         //ระยะส่ง
                         ListTile(
                             leading: Icon(Icons.date_range),
@@ -190,42 +197,7 @@ class _ShareAddBidState extends State<ShareAddBid> {
                                   labelText: 'ระยะส่ง ( 1- 30 วัน)'),
                               keyboardType: TextInputType.number,
                             )),
-                        //บิดเริ่มต้น
-                        ListTile(
-                            leading: Icon(Icons.filter_vintage_sharp),
-                            title: TextFormField(
-                              onSaved: (value) => shareModel.firstBid =
-                                  int.parse(value.toString()),
-                              validator: (value) =>
-                                  checkNum(value, 'จำเป็นต้องใส่บิดเริ่มต้น'),
-                              decoration:
-                                  InputDecoration(labelText: 'บิดเริ่มต้น'),
-                              keyboardType: TextInputType.number,
-                            )),
-                        //บิดครั้้งละ
-                        ListTile(
-                            leading: Icon(Icons.filter_vintage_sharp),
-                            title: TextFormField(
-                              onSaved: (value) =>
-                                  shareModel.bid = int.parse(value.toString()),
-                              validator: (value) =>
-                                  checkNum(value, 'จำเป็นต้องบิดครั้งละ'),
-                              decoration:
-                                  InputDecoration(labelText: 'บิดครั้งละ'),
-                              keyboardType: TextInputType.number,
-                            )),
-                        //ไม่มีคนบิดสุ่มดอก
-                        ListTile(
-                            leading: Icon(Icons.filter_vintage_sharp),
-                            title: TextFormField(
-                              onSaved: (value) => shareModel.noBid =
-                                  int.parse(value.toString()),
-                              validator: (value) =>
-                                  checkNum(value, 'จำเป็นต้องใส่สุ่มดอก'),
-                              decoration: InputDecoration(
-                                  labelText: 'ไม่มีคนบิด สุ่มดอก'),
-                              keyboardType: TextInputType.number,
-                            )),
+
                         //เช็คบ๊อก
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),

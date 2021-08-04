@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_share/models/api.dart';
+import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
-//import 'package:flutter_share/providers/api.dart';
+import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/screen/share/shareAdd.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidHome.dart';
+import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestHome.dart';
 //import 'package:flutter_share/screen/share/shareBid/shareShowBidInterrest.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,12 @@ class ShareList extends StatefulWidget {
 }
 
 class _ShareListState extends State<ShareList> {
-  //late ApiModel apiModel;
+  late ApiModel apiModel;
   @override
   void initState() {
     super.initState();
-    //apiModel = context.read<ApiProvider>().api;
+    apiModel = context.read<ApiProvider>().api;
+    Provider.of<ShareProvider>(context, listen: false).initData(apiModel);
   }
 
   @override
@@ -113,6 +115,11 @@ class _ShareListState extends State<ShareList> {
     if (share.shareType == 'บิด') {
       return MaterialPageRoute(
           builder: (context) => ShareShowBidHome(tab: 2, share: share));
+    }
+    if (share.shareType == 'ดอกตาม') {
+      return MaterialPageRoute(
+          builder: (context) =>
+              ShareShowFollowInterestHome(tab: 2, share: share));
     }
     return throw Error();
   }

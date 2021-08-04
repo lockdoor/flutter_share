@@ -15,6 +15,7 @@ class CustomerProvider with ChangeNotifier {
       }).toList();
 
   void initData(ApiModel apiModel) async {
+    print('Provider กำลังเรียกฐานข้อมูลลูกค้า');
     this.customers = await CustomerModel.getAllCustomers(apiModel);
     this.admin = findAdmin(this.customers);
     notifyListeners();

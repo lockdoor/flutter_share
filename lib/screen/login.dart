@@ -25,6 +25,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     apiUri = context.read<ApiProvider>().api.getApiUri();
+    email.text = 'lockdoor@gmail.com';
+    password.text = '77776666';
   }
 
   @override
