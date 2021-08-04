@@ -1,6 +1,3 @@
-//import 'dart:io';
-//import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
@@ -8,11 +5,9 @@ import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
-//import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:intl/intl.dart';
-//import 'package:share_plus/share_plus.dart';
 
 import '../../capture.dart';
 

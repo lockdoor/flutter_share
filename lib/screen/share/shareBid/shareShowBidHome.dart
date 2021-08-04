@@ -1,16 +1,12 @@
-//import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
-//import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidDetail.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidInterrest.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidPay.dart';
 import 'package:provider/provider.dart';
-//import 'package:screenshot/screenshot.dart';
 
 class ShareShowBidHome extends StatefulWidget {
   final tab;

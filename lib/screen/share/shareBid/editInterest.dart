@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
-//import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';

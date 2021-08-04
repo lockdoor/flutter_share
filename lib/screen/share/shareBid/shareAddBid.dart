@@ -1,16 +1,11 @@
-//import 'dart:convert';
-//import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_share/models/api.dart';
-//import 'package:flutter_share/models/customer/customer.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
-//import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/screen/home.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-//import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

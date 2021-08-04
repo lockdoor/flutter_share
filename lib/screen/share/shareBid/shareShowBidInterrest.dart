@@ -1,10 +1,5 @@
-//import 'dart:convert';
 //capture screenshot
 //https://www.youtube.com/watch?v=rABnaF-Xk3E
-
-//import 'dart:html';
-// import 'dart:io';
-// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
@@ -16,12 +11,9 @@ import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editInterest.dart';
-//import 'package:image_gallery_saver/image_gallery_saver.dart';
-// import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
-// import 'package:share_plus/share_plus.dart';
 
 import '../../capture.dart';
 
