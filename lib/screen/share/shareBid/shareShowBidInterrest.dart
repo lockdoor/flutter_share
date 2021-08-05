@@ -9,13 +9,14 @@ import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
-import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
+//import 'package:flutter_share/screen/share/shareBid/editCustomer.dart';
 import 'package:flutter_share/screen/share/shareBid/editInterest.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 
 import '../../capture.dart';
+import '../shareAddOrEditCustomer.dart';
 
 class ShareShowBidInterest extends StatefulWidget {
   final shareModel;
