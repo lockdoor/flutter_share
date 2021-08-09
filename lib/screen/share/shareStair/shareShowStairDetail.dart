@@ -7,24 +7,23 @@ import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/capture.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 
-class ShareShowFollowInterestDetail extends StatefulWidget {
-  final shareModel;
-  final title;
-  const ShareShowFollowInterestDetail(
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
+class ShareShowStairDetail extends StatefulWidget {
+  final ShareModel shareModel;
+  final String title;
+  const ShareShowStairDetail(
       {Key? key, required this.shareModel, required this.title})
       : super(key: key);
 
   @override
-  _ShareShowFollowInterestDetailState createState() =>
-      _ShareShowFollowInterestDetailState();
+  _ShareShowStairDetailState createState() => _ShareShowStairDetailState();
 }
 
-class _ShareShowFollowInterestDetailState
-    extends State<ShareShowFollowInterestDetail> {
+class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
   late ShareModel shareModel;
   late ShareModel shareModelOld;
   late ApiModel apiModel;
@@ -35,8 +34,10 @@ class _ShareShowFollowInterestDetailState
   final TextEditingController principleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController payController = TextEditingController();
-  final TextEditingController interestFixController = TextEditingController();
   final TextEditingController daysController = TextEditingController();
+  final TextEditingController firstBidController = TextEditingController();
+  final TextEditingController bidController = TextEditingController();
+  final TextEditingController lastBidController = TextEditingController();
   final ScreenshotController screenshotController = ScreenshotController();
   final TextEditingController alertTextFrom = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -55,8 +56,11 @@ class _ShareShowFollowInterestDetailState
     amountController.text = shareModel.amount.toString();
     payController.text = shareModel.pay.toString();
     daysController.text = shareModel.days.toString();
+    firstBidController.text = shareModel.firstBid.toString();
+    bidController.text = shareModel.bid.toString();
+    lastBidController.text = shareModel.bid.toString();
     feeController.text = shareModel.fee.toString();
-    interestFixController.text = shareModel.interestFix.toString();
+    print('แชร์เท่ากันหรือไม่ ${shareModel == shareModelOld}');
   }
 
   @override
@@ -68,8 +72,10 @@ class _ShareShowFollowInterestDetailState
     principleController.dispose();
     amountController.dispose();
     payController.dispose();
-    interestFixController.dispose();
     daysController.dispose();
+    firstBidController.dispose();
+    bidController.dispose();
+    lastBidController.dispose();
     alertTextFrom.dispose();
   }
 
@@ -354,19 +360,6 @@ class _ShareShowFollowInterestDetailState
                             decoration: InputDecoration(labelText: 'ส่งมือละ'),
                             keyboardType: TextInputType.number,
                           )),
-                      //ดอกเบี้ย
-                      ListTile(
-                          leading: Icon(Icons.filter_vintage_sharp),
-                          title: TextFormField(
-                            enabled: canEdit,
-                            controller: interestFixController,
-                            onSaved: (value) => shareModel.interestFix =
-                                int.parse(value.toString()),
-                            validator: (value) =>
-                                checkNum(value, 'จำเป็นต้องใส่ดอกเบี้ย'),
-                            decoration: InputDecoration(labelText: 'ดอกเบี้ย'),
-                            keyboardType: TextInputType.number,
-                          )),
                       //ระยะส่ง
                       ListTile(
                           leading: Icon(Icons.date_range),
@@ -391,6 +384,48 @@ class _ShareShowFollowInterestDetailState
                             },
                             decoration: InputDecoration(
                                 labelText: 'ระยะส่ง ( 1- 30 วัน)'),
+                            keyboardType: TextInputType.number,
+                          )),
+                      //บิดเริ่มต้น
+                      ListTile(
+                          leading: Icon(Icons.filter_vintage_sharp),
+                          title: TextFormField(
+                            enabled: canEdit,
+                            controller: firstBidController,
+                            onSaved: (value) => shareModel.firstBid =
+                                int.parse(value.toString()),
+                            validator: (value) =>
+                                checkNum(value, 'จำเป็นต้องใส่บิดเริ่มต้น'),
+                            decoration:
+                                InputDecoration(labelText: 'บิดเริ่มต้น'),
+                            keyboardType: TextInputType.number,
+                          )),
+                      //บิดครั้้งละ
+                      ListTile(
+                          leading: Icon(Icons.filter_vintage_sharp),
+                          title: TextFormField(
+                            enabled: canEdit,
+                            controller: bidController,
+                            onSaved: (value) =>
+                                shareModel.bid = int.parse(value.toString()),
+                            validator: (value) =>
+                                checkNum(value, 'จำเป็นต้องบิดครั้งละ'),
+                            decoration:
+                                InputDecoration(labelText: 'บิดครั้งละ'),
+                            keyboardType: TextInputType.number,
+                          )),
+                      //ไม่มีคนบิดสุ่มดอก
+                      ListTile(
+                          leading: Icon(Icons.filter_vintage_sharp),
+                          title: TextFormField(
+                            enabled: canEdit,
+                            controller: lastBidController,
+                            onSaved: (value) =>
+                                shareModel.noBid = int.parse(value.toString()),
+                            validator: (value) =>
+                                checkNum(value, 'จำเป็นต้องใส่สุ่มดอก'),
+                            decoration: InputDecoration(
+                                labelText: 'ไม่มีคนบิด สุ่มดอก'),
                             keyboardType: TextInputType.number,
                           )),
                       //เช็คบ๊อก
@@ -445,6 +480,41 @@ class _ShareShowFollowInterestDetailState
                           ],
                         )),
                       ),
+                      //submit
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(vertical: 8),
+                      //   child: SizedBox(
+                      //     width: double.infinity,
+                      //     height: 40,
+                      //     child: ElevatedButton(
+                      //         onPressed: () async {
+                      //           if (shareAddBitForm.currentState!.validate()) {
+                      //             shareAddBitForm.currentState!.save();
+                      //             print('เริ่มทำการบันทึก');
+                      //             //print(jsonEncode(share.toJson()));
+
+                      //             final response = await Provider.of<ShareProvider>(
+                      //                     context,
+                      //                     listen: false)
+                      //                 .addData(apiModel, shareModel);
+                      //             print(response.statusCode);
+                      //             print(response.body);
+                      //             if (response.statusCode == 201) {
+                      //               // Route route = MaterialPageRoute(
+                      //               //     builder: (context) => Home(
+                      //               //           tab: 2,
+                      //               //         ));
+                      //               // Navigator.pushReplacement(
+                      //               //     context, route);
+                      //             }
+                      //           }
+                      //         },
+                      //         child: Text(
+                      //           'เพิ่มวงแชร์',
+                      //           style: TextStyle(fontSize: 16),
+                      //         )),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -460,16 +530,20 @@ class _ShareShowFollowInterestDetailState
     if (shareUpdateBitForm.currentState!.validate()) {
       shareUpdateBitForm.currentState!.save();
       final shareModelNew = shareModel;
+      //final json = shareModel.toJson();
+      //final jsonOld = shareModelOld.toJson();
+      // print('json  is ' + json.toString());
+      // print('json old is ' + jsonOld.toString());
       final Response response =
           await Provider.of<ShareProvider>(context, listen: false)
               .updateShare(apiModel, shareModelNew, shareModelOld);
       if (response.statusCode == 201) {
-        Provider.of<ShareCustomerProvider>(context, listen: false)
-            .initData(apiModel, shareModel);
         Navigator.pop(context);
         print(response.body);
         alertTextFrom.clear();
         canEdit = false;
+        Provider.of<ShareCustomerProvider>(context, listen: false)
+            .initData(apiModel, shareModel);
         _scaffoldKey.currentState!.openEndDrawer();
       }
     }

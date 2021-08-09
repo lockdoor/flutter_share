@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
-import 'package:flutter_share/screen/share/shareBid/shareShowBidCustomerReceive.dart';
+import 'package:flutter_share/screen/capture.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:intl/intl.dart';
 
-import '../../capture.dart';
-
-class ShareShowBidPay extends StatefulWidget {
-  final shareModel;
-  final title;
-  const ShareShowBidPay(
+class ShareShowFollowInterestPay extends StatefulWidget {
+  final ShareModel shareModel;
+  final String title;
+  const ShareShowFollowInterestPay(
       {Key? key, required this.shareModel, required this.title})
       : super(key: key);
 
   @override
-  _ShareShowBidPayState createState() => _ShareShowBidPayState();
+  _ShareShowFollowInterestPayState createState() =>
+      _ShareShowFollowInterestPayState();
 }
 
-class _ShareShowBidPayState extends State<ShareShowBidPay> {
+class _ShareShowFollowInterestPayState
+    extends State<ShareShowFollowInterestPay> {
   late ShareModel shareModel;
   late List<ShareCustomerModel> shareCustomers;
   ScreenshotController screenshotController = ScreenshotController();
   int? adminFirstSequence;
   int? adminLastSequence;
-
+  final DateTime yesterday = new DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day - 1);
   TextStyle shareDeath = TextStyle(color: Colors.red);
 
   @override
@@ -110,33 +111,26 @@ class _ShareShowBidPayState extends State<ShareShowBidPay> {
   }
 
   Widget showDate(ShareCustomerModel shareCustomerModel) {
-    if ((shareCustomerModel.sequence == adminFirstSequence ||
-            shareCustomerModel.sequence == adminLastSequence) ||
-        (shareCustomerModel.interest != null &&
-            shareCustomerModel.interest != 0)) {
-      return Text(DateFormat('dd/MM').format(shareCustomerModel.shareDate),
-          style: shareDeath);
+    if (shareCustomerModel.shareDate.isBefore(yesterday)) {
+      return Text(
+        DateFormat('dd/MM').format(shareCustomerModel.shareDate),
+        style: shareDeath,
+      );
     } else {
-      return Text('');
+      return Text(DateFormat('dd/MM').format(shareCustomerModel.shareDate));
     }
   }
 
   Widget showPay(ShareCustomerModel shareCustomerModel) {
-    int interest =
-        shareCustomerModel.interest == null ? 0 : shareCustomerModel.interest!;
-    int pay = this.shareModel.pay! + interest;
     if ((shareCustomerModel.sequence == adminFirstSequence ||
         shareCustomerModel.sequence == adminLastSequence)) {
       return Text('ท้าว');
     } else {
-      if (shareCustomerModel.interest != null &&
-          shareCustomerModel.interest != 0) {
-        return Text(
-          pay.toString(),
-          style: shareDeath,
-        );
+      if (shareCustomerModel.shareDate.isBefore(yesterday)) {
+        return Text('${shareModel.pay! + shareModel.interestFix!}',
+            style: shareDeath);
       } else {
-        return Text(pay.toString());
+        return Text('${shareModel.pay}');
       }
     }
   }
@@ -144,8 +138,7 @@ class _ShareShowBidPayState extends State<ShareShowBidPay> {
   Widget showName(ShareCustomerModel shareCustomerModel) {
     if (shareCustomerModel.personName == null) {
       return Text('');
-    } else if (shareCustomerModel.interest != null &&
-        shareCustomerModel.interest != 0) {
+    } else if (shareCustomerModel.shareDate.isBefore(yesterday)) {
       return Text(
         shareCustomerModel.personName.toString(),
         style: shareDeath,
@@ -164,17 +157,23 @@ class _ShareShowBidPayState extends State<ShareShowBidPay> {
       title: Row(
         children: [
           Expanded(flex: 1, child: showDate(shareCustomer)),
-          Expanded(flex: 3, child: showName(shareCustomer)),
+          Expanded(
+            flex: 3,
+            child: showName(shareCustomer),
+            // Text(shareCustomer.personName == null
+            //     ? ''
+            //     : shareCustomer.personName!),
+          ),
           Expanded(flex: 1, child: showPay(shareCustomer)),
         ],
       ),
       onTap: () {
-        if (shareCustomer.interest != 0 && shareCustomer.interest != null) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ShareShowBidCustomerReceive(
-                shareCustomerModel: shareCustomer, shareModel: shareModel);
-          }));
-        }
+        // if (shareCustomer.interest != 0 && shareCustomer.interest != null) {
+        //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //     return ShareShowBidCustomerReceive(
+        //         shareCustomerModel: shareCustomer, shareModel: shareModel);
+        //   }));
+        // }
       },
     );
   }

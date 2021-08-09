@@ -14,7 +14,7 @@ class ShareModel {
   late int principle; //เงินต้น
   int? interestFix; //ดอกตายตัว
   late int amount; // จำนวนมือ
-  late int pay; //ส่งมือละ
+  int? pay; //ส่งมือละ
   late int days; //ระยะส่ง
   int? firstBid; //บิดเริ่มต้น
   int? bid; //บิดครั้งละ
@@ -33,7 +33,7 @@ class ShareModel {
         'principle': principle,
         'interest_fix': interestFix == null ? null : interestFix,
         'amount': amount,
-        'pay': pay,
+        'pay': pay == null ? null : pay,
         'days': days,
         'first_bid': firstBid == null ? null : firstBid,
         'bid': bid == null ? null : bid,
@@ -53,7 +53,7 @@ class ShareModel {
         interestFix =
             json['interest_fix'] == null ? null : json['interest_fix'],
         amount = json['amount'],
-        pay = json['pay'],
+        pay = json['pay'] == null ? null : json['pay'],
         days = json['days'],
         firstBid = json['first_bid'] == null ? null : json['first_bid'],
         bid = json['bid'] == null ? null : json['bid'],

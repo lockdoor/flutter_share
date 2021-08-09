@@ -24,6 +24,7 @@ class ShareCustomerModel {
   int sequence;
   int? interest;
   bool locker;
+  String? comment;
 
   ShareCustomerModel.fromJson(Map<String, dynamic> json)
       : sharesPersonsID = json["shares_persons_id"],
@@ -34,7 +35,8 @@ class ShareCustomerModel {
         shareDate = DateTime.parse(json["share_date"]),
         sequence = json["sequence"],
         interest = json["interest"] == null ? null : json["interest"],
-        locker = json["locker"] == 1 ? true : false;
+        locker = json["locker"] == 1 ? true : false,
+        comment = json["comment"] == null ? null : json['comment'];
 
   Map<String, dynamic> toJson() => {
         "shares_persons_id": sharesPersonsID,
@@ -43,7 +45,8 @@ class ShareCustomerModel {
         "share_date": shareDate.toIso8601String(),
         "sequence": sequence,
         "interest": interest == null ? null : interest,
-        "locker": locker
+        "locker": locker,
+        "comment": comment
       };
   static getAllShareCustomer(ApiModel apiModel, ShareModel shareModel) async {
     final response = await http
@@ -102,6 +105,18 @@ class ShareCustomerModel {
       ApiModel apiModel, ShareCustomerModel shareCustomerModel) async {
     final http.Response response = await http.post(
         Uri.parse(apiModel.getApiUri() + 'api/share_person_set_locker'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + apiModel.getToken()
+        },
+        body: jsonEncode(shareCustomerModel.toJson()));
+    return response;
+  }
+
+  static updateComment(
+      ApiModel apiModel, ShareCustomerModel shareCustomerModel) async {
+    final http.Response response = await http.post(
+        Uri.parse(apiModel.getApiUri() + 'api/share_person_update_comment'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ' + apiModel.getToken()

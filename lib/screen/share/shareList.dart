@@ -7,6 +7,7 @@ import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/screen/share/shareAdd.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidHome.dart';
 import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestHome.dart';
+import 'package:flutter_share/screen/share/shareStair/shareShowStairHome.dart';
 //import 'package:flutter_share/screen/share/shareBid/shareShowBidInterrest.dart';
 import 'package:provider/provider.dart';
 
@@ -120,6 +121,10 @@ class _ShareListState extends State<ShareList> {
       return MaterialPageRoute(
           builder: (context) =>
               ShareShowFollowInterestHome(tab: 2, share: share));
+    }
+    if (share.shareType == 'ขั้นบันได') {
+      return MaterialPageRoute(
+          builder: (context) => ShareShowStairHome(tab: 2, shareModel: share));
     }
     return throw Error();
   }

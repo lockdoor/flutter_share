@@ -77,4 +77,15 @@ class ShareCustomerProvider with ChangeNotifier {
     });
     return response;
   }
+
+  updateComment(ApiModel apiModel, ShareModel shareModel,
+      ShareCustomerModel shareCustomerModel) async {
+    Response response =
+        await ShareCustomerModel.updateComment(apiModel, shareCustomerModel)
+            .then((response) {
+      initData(apiModel, shareModel);
+      return response;
+    });
+    return response;
+  }
 }

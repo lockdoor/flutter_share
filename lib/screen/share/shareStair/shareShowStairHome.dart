@@ -3,25 +3,21 @@ import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
-import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestDetail.dart';
-import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestInterest.dart';
-import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestPay.dart';
 import 'package:provider/provider.dart';
 
-class ShareShowFollowInterestHome extends StatefulWidget {
-  final tab;
-  final share;
-  const ShareShowFollowInterestHome(
-      {Key? key, required this.tab, required this.share})
+class ShareShowStairHome extends StatefulWidget {
+  final int tab;
+  final ShareModel shareModel;
+
+  const ShareShowStairHome(
+      {Key? key, required this.tab, required this.shareModel})
       : super(key: key);
 
   @override
-  _ShareShowFollowInterestHomeState createState() =>
-      _ShareShowFollowInterestHomeState();
+  _ShareShowStairHomeState createState() => _ShareShowStairHomeState();
 }
 
-class _ShareShowFollowInterestHomeState
-    extends State<ShareShowFollowInterestHome> {
+class _ShareShowStairHomeState extends State<ShareShowStairHome> {
   int tab = 1;
   Widget myBody = Scaffold();
   late ShareModel shareModel;
@@ -34,7 +30,7 @@ class _ShareShowFollowInterestHomeState
   void initState() {
     super.initState();
     apiModel = context.read<ApiProvider>().api;
-    shareModel = widget.share;
+    shareModel = widget.shareModel;
     Provider.of<ShareCustomerProvider>(context, listen: false)
         .initData(apiModel, shareModel);
     tabMyBody(widget.tab);
@@ -57,21 +53,21 @@ class _ShareShowFollowInterestHomeState
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowFollowInterestDetail();
+                    shareShowBidDetail();
                   });
                 },
                 icon: Icon(Icons.article)),
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowFollowInterestInterest();
+                    shareShowBidInterest();
                   });
                 },
                 icon: Icon(Icons.filter_vintage_sharp)),
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowFollowInterestPay();
+                    shareShowBidPay();
                   });
                 },
                 icon: Icon(Icons.person)),
@@ -81,33 +77,29 @@ class _ShareShowFollowInterestHomeState
     );
   }
 
-  void shareShowFollowInterestDetail() {
+  void shareShowBidDetail() {
     title = 'รายละเอียด';
-    myBody = ShareShowFollowInterestDetail(
-        shareModel: this.shareModel, title: this.title);
+    //myBody = ShareShowBidDetail(shareModel: shareModel, title: title);
   }
 
-  void shareShowFollowInterestInterest() {
+  void shareShowBidInterest() {
     title = 'ดอกเบี้ย';
-    myBody = ShareShowFollowInterestInterest(
-      shareModel: this.shareModel,
-      title: this.title,
-    );
+    // myBody = ShareShowBidInterest(
+    //   shareModel: this.shareModel,
+    //   title: this.title,
+    // );
   }
 
-  void shareShowFollowInterestPay() {
+  void shareShowBidPay() {
     title = 'เรตส่ง';
-    myBody = ShareShowFollowInterestPay(
-      shareModel: this.shareModel,
-      title: this.title,
-    );
+    //myBody = ShareShowBidPay(shareModel: shareModel, title: title);
   }
 
   void tabMyBody(tab) {
     if (tab == 1)
-      shareShowFollowInterestDetail();
+      shareShowBidDetail();
     else if (tab == 2)
-      shareShowFollowInterestInterest();
-    else if (tab == 3) shareShowFollowInterestPay();
+      shareShowBidInterest();
+    else if (tab == 3) shareShowBidPay();
   }
 }

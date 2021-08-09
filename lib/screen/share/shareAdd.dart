@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/screen/share/shareBid/shareAddBid.dart';
-import 'package:flutter_share/screen/share/shareFollowInterest/ShareAddFollowInterest.dart';
+import 'package:flutter_share/screen/share/shareFollowInterest/shareAddFollowInterest.dart';
+import 'package:flutter_share/screen/share/shareStair/shareAddStair.dart';
 import 'package:provider/provider.dart';
 
 class ShareAdd extends StatefulWidget {
@@ -37,6 +38,7 @@ class _ShareAddState extends State<ShareAdd> {
             children: [
               myCard('แชร์แบบบิด', routeShareAddBit(), 1),
               myCard('ดอกตาม', routeShareInterestAfterRecrive(), 2),
+              myCard('ขั้นบันได', routeShareAddStair(), 3),
             ],
           ),
         ),
@@ -49,6 +51,9 @@ class _ShareAddState extends State<ShareAdd> {
 
   Route routeShareAddBit() =>
       MaterialPageRoute(builder: (context) => ShareAddBid());
+
+  Route routeShareAddStair() =>
+      MaterialPageRoute(builder: (context) => ShareAddStair());
 
   Widget myCard(text, Route route, index) {
     return Card(

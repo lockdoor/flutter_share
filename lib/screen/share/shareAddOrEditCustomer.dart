@@ -24,6 +24,7 @@ class _EditShareCustomerCustomerState extends State<EditShareCustomerCustomer> {
   late ShareCustomerModel shareCustomer;
   String hintText = 'เพิ่มหรือเปลี่ยนรายชื่อลูกค้า';
   TextEditingController submit = new TextEditingController();
+  TextEditingController nickName = new TextEditingController();
   late List<CustomerModel> customers;
   CustomerModel? newCustomer;
   late ApiModel apiModel;
@@ -39,6 +40,7 @@ class _EditShareCustomerCustomerState extends State<EditShareCustomerCustomer> {
   void dispose() {
     super.dispose();
     submit.dispose();
+    nickName.dispose();
   }
 
   @override
@@ -66,6 +68,7 @@ class _EditShareCustomerCustomerState extends State<EditShareCustomerCustomer> {
                   child: TypeAheadField<CustomerModel?>(
                       hideSuggestionsOnKeyboardHide: false,
                       textFieldConfiguration: TextFieldConfiguration(
+                        controller: nickName,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(),
@@ -94,6 +97,7 @@ class _EditShareCustomerCustomerState extends State<EditShareCustomerCustomer> {
                       onSuggestionSelected: (CustomerModel? customerModel) {
                         setState(() {
                           this.hintText = customerModel!.nickName;
+                          this.nickName.text = customerModel.nickName;
                         });
                         newCustomer = customerModel!;
                       }),
