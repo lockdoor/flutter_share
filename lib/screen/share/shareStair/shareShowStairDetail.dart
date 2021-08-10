@@ -33,11 +33,7 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
   final TextEditingController dateRunController = TextEditingController();
   final TextEditingController principleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController payController = TextEditingController();
   final TextEditingController daysController = TextEditingController();
-  final TextEditingController firstBidController = TextEditingController();
-  final TextEditingController bidController = TextEditingController();
-  final TextEditingController lastBidController = TextEditingController();
   final ScreenshotController screenshotController = ScreenshotController();
   final TextEditingController alertTextFrom = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -54,11 +50,7 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
         DateFormat('dd-MM-yyyy').format(shareModel.dateRun).toString();
     principleController.text = shareModel.principle.toString();
     amountController.text = shareModel.amount.toString();
-    payController.text = shareModel.pay.toString();
     daysController.text = shareModel.days.toString();
-    firstBidController.text = shareModel.firstBid.toString();
-    bidController.text = shareModel.bid.toString();
-    lastBidController.text = shareModel.bid.toString();
     feeController.text = shareModel.fee.toString();
     print('แชร์เท่ากันหรือไม่ ${shareModel == shareModelOld}');
   }
@@ -71,11 +63,7 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
     dateRunController.dispose();
     principleController.dispose();
     amountController.dispose();
-    payController.dispose();
     daysController.dispose();
-    firstBidController.dispose();
-    bidController.dispose();
-    lastBidController.dispose();
     alertTextFrom.dispose();
   }
 
@@ -323,8 +311,6 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
                           title: TextFormField(
                             enabled: canEdit,
                             controller: principleController,
-                            onChanged: (value) => payByPrincipleDivideAmount(
-                                value, 'เงินต้นไม่ถูกต้อง', 'principle'),
                             onSaved: (value) => shareModel.principle =
                                 int.parse(value.toString()),
                             validator: (value) =>
@@ -337,8 +323,6 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
                           leading: Icon(Icons.face),
                           title: TextFormField(
                             enabled: canEdit,
-                            onChanged: (value) => payByPrincipleDivideAmount(
-                                value, 'จำนวนมือไม่ถูกต้อง', 'amount'),
                             controller: amountController,
                             onSaved: (value) =>
                                 shareModel.amount = int.parse(value.toString()),
@@ -347,19 +331,7 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
                             decoration: InputDecoration(labelText: 'จำนวนมือ'),
                             keyboardType: TextInputType.number,
                           )),
-                      //ส่งมือละ
-                      ListTile(
-                          leading: Icon(Icons.attach_money),
-                          title: TextFormField(
-                            enabled: canEdit,
-                            controller: payController,
-                            onSaved: (value) =>
-                                shareModel.pay = int.parse(value.toString()),
-                            validator: (value) =>
-                                checkNum(value, 'จำเป็นต้องใส่ส่งมือละ'),
-                            decoration: InputDecoration(labelText: 'ส่งมือละ'),
-                            keyboardType: TextInputType.number,
-                          )),
+
                       //ระยะส่ง
                       ListTile(
                           leading: Icon(Icons.date_range),
@@ -386,48 +358,7 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
                                 labelText: 'ระยะส่ง ( 1- 30 วัน)'),
                             keyboardType: TextInputType.number,
                           )),
-                      //บิดเริ่มต้น
-                      ListTile(
-                          leading: Icon(Icons.filter_vintage_sharp),
-                          title: TextFormField(
-                            enabled: canEdit,
-                            controller: firstBidController,
-                            onSaved: (value) => shareModel.firstBid =
-                                int.parse(value.toString()),
-                            validator: (value) =>
-                                checkNum(value, 'จำเป็นต้องใส่บิดเริ่มต้น'),
-                            decoration:
-                                InputDecoration(labelText: 'บิดเริ่มต้น'),
-                            keyboardType: TextInputType.number,
-                          )),
-                      //บิดครั้้งละ
-                      ListTile(
-                          leading: Icon(Icons.filter_vintage_sharp),
-                          title: TextFormField(
-                            enabled: canEdit,
-                            controller: bidController,
-                            onSaved: (value) =>
-                                shareModel.bid = int.parse(value.toString()),
-                            validator: (value) =>
-                                checkNum(value, 'จำเป็นต้องบิดครั้งละ'),
-                            decoration:
-                                InputDecoration(labelText: 'บิดครั้งละ'),
-                            keyboardType: TextInputType.number,
-                          )),
-                      //ไม่มีคนบิดสุ่มดอก
-                      ListTile(
-                          leading: Icon(Icons.filter_vintage_sharp),
-                          title: TextFormField(
-                            enabled: canEdit,
-                            controller: lastBidController,
-                            onSaved: (value) =>
-                                shareModel.noBid = int.parse(value.toString()),
-                            validator: (value) =>
-                                checkNum(value, 'จำเป็นต้องใส่สุ่มดอก'),
-                            decoration: InputDecoration(
-                                labelText: 'ไม่มีคนบิด สุ่มดอก'),
-                            keyboardType: TextInputType.number,
-                          )),
+
                       //เช็คบ๊อก
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -480,41 +411,6 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
                           ],
                         )),
                       ),
-                      //submit
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(vertical: 8),
-                      //   child: SizedBox(
-                      //     width: double.infinity,
-                      //     height: 40,
-                      //     child: ElevatedButton(
-                      //         onPressed: () async {
-                      //           if (shareAddBitForm.currentState!.validate()) {
-                      //             shareAddBitForm.currentState!.save();
-                      //             print('เริ่มทำการบันทึก');
-                      //             //print(jsonEncode(share.toJson()));
-
-                      //             final response = await Provider.of<ShareProvider>(
-                      //                     context,
-                      //                     listen: false)
-                      //                 .addData(apiModel, shareModel);
-                      //             print(response.statusCode);
-                      //             print(response.body);
-                      //             if (response.statusCode == 201) {
-                      //               // Route route = MaterialPageRoute(
-                      //               //     builder: (context) => Home(
-                      //               //           tab: 2,
-                      //               //         ));
-                      //               // Navigator.pushReplacement(
-                      //               //     context, route);
-                      //             }
-                      //           }
-                      //         },
-                      //         child: Text(
-                      //           'เพิ่มวงแชร์',
-                      //           style: TextStyle(fontSize: 16),
-                      //         )),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -561,39 +457,6 @@ class _ShareShowStairDetailState extends State<ShareShowStairDetail> {
         }
       }
       return null;
-    }
-  }
-
-  void payByPrincipleDivideAmount(val, String showError, flag) {
-    final String num = '0123456789';
-    String value = val.trim();
-    if (value.length > 0) {
-      for (int i = 0; i < value.length; i++) {
-        if (!num.contains(value[i])) {
-          formCollect[flag] = false;
-          payController.text = showError;
-          break;
-        } else {
-          formCollect[flag] = true;
-        }
-      }
-    } else {
-      formCollect[flag] = false;
-      payController.text = '';
-    }
-    if (formCollect['principle'] == true && formCollect['amount'] == true) {
-      int principleInt = int.parse(principleController.text.toString());
-      int amountInt = int.parse(amountController.text.toString());
-      if (shareModel.firstReceive) {
-        amountInt -= 1;
-      }
-      if (amountInt != 0) {
-        double payDouble = principleInt / amountInt;
-        int payInt = payDouble.round();
-        setState(() {
-          payController.text = payInt.toString();
-        });
-      }
     }
   }
 

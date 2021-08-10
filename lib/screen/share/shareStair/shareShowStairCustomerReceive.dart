@@ -11,28 +11,28 @@ import 'package:screenshot/screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class ShareShowBidCustomerReceive extends StatefulWidget {
+class ShareShowStairCustomerReceive extends StatefulWidget {
   final ShareCustomerModel shareCustomerModel;
   final ShareModel shareModel;
-  const ShareShowBidCustomerReceive(
+  const ShareShowStairCustomerReceive(
       {Key? key, required this.shareCustomerModel, required this.shareModel})
       : super(key: key);
 
   @override
-  _ShareShowBidCustomerReceiveState createState() =>
-      _ShareShowBidCustomerReceiveState();
+  _ShareShowStairCustomerReceiveState createState() =>
+      _ShareShowStairCustomerReceiveState();
 }
 
-class _ShareShowBidCustomerReceiveState
-    extends State<ShareShowBidCustomerReceive> {
+class _ShareShowStairCustomerReceiveState
+    extends State<ShareShowStairCustomerReceive> {
   late ShareCustomerModel shareCustomerModel;
   late ShareModel shareModel;
   late List<ShareCustomerModel> shareCustomerModels;
   late ApiModel apiModel;
   ScreenshotController screenshotController = ScreenshotController();
   TextStyle bigFont = TextStyle(fontSize: 20);
-  late int totalInterest;
-  late int last;
+  // late int totalInterest;
+  int? last;
   late int totalReceive;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController commentController = TextEditingController();
@@ -44,10 +44,10 @@ class _ShareShowBidCustomerReceiveState
     shareModel = widget.shareModel;
     shareCustomerModels = context.read<ShareCustomerProvider>().shareCustomers;
     apiModel = context.read<ApiProvider>().api;
-    totalInterest = totalInterestReceive(
-        shareModel, shareCustomerModel, shareCustomerModels);
+    // totalInterest = totalInterestReceive(
+    //     shareModel, shareCustomerModel, shareCustomerModels);
     last = lastReceive(shareModel, shareCustomerModel);
-    totalReceive = shareModel.principle + totalInterest - last;
+    totalReceive = shareModel.principle - shareCustomerModel.interest!;
     if (shareCustomerModel.comment != null)
       commentController.text = shareCustomerModel.comment!;
   }
@@ -110,17 +110,17 @@ class _ShareShowBidCustomerReceiveState
                             'วันที่ : ${DateFormat('dd/MM/yyyy').format(shareCustomerModel.shareDate)}',
                             style: bigFont),
                         Text(
-                          'ดอกเบี้ย : ${shareCustomerModel.interest}',
+                          'ยอดส่ง : ${shareCustomerModel.interest}',
                           style: bigFont,
                         ),
-                        Text(
-                          'เงินต้น : ${shareModel.principle}',
-                          style: bigFont,
-                        ),
-                        Text(
-                          'รับดอกเบี้ยรวม : $totalInterest',
-                          style: bigFont,
-                        ),
+                        // Text(
+                        //   'เงินต้น : ${shareModel.principle}',
+                        //   style: bigFont,
+                        // ),
+                        // Text(
+                        //   'รับดอกเบี้ยรวม : $totalInterest',
+                        //   style: bigFont,
+                        // ),
                         if (shareModel.lastReceive == true)
                           Text(
                             'หักค้ำท้าย : $last',
@@ -183,24 +183,10 @@ class _ShareShowBidCustomerReceiveState
     );
   }
 
-  int totalInterestReceive(
-      ShareModel shareModel,
-      ShareCustomerModel shareCustomerModel,
-      List<ShareCustomerModel> shareCustomerModels) {
-    int interestTotal = 0;
-    for (int i = 0; i < shareCustomerModel.sequence - 1; i++) {
-      int interest = shareCustomerModels[i].interest == null
-          ? 0
-          : shareCustomerModels[i].interest!;
-      interestTotal += interest;
-    }
-    return interestTotal;
-  }
-
   int lastReceive(
       ShareModel shareModel, ShareCustomerModel shareCustomerModel) {
     if (shareModel.lastReceive == true) {
-      return shareModel.pay! + shareCustomerModel.interest!;
+      return shareCustomerModel.interest!;
     } else {
       return 0;
     }
@@ -284,12 +270,6 @@ class _ShareShowBidCustomerReceiveState
           )),
         )),
       );
-      // final Response response =
-      //     Provider.of<ShareCustomerProvider>(context, listen: false)
-      //         .updateComment(apiModel, shareModel, shareCustomerModel);
-      // if (response.statusCode == 201) {
-      //   //do some thing
-      // }
     }
   }
 }

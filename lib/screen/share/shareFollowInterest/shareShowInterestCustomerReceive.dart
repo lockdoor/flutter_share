@@ -11,20 +11,20 @@ import 'package:screenshot/screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class ShareShowBidCustomerReceive extends StatefulWidget {
+class ShareShowInterestCustomerReceive extends StatefulWidget {
   final ShareCustomerModel shareCustomerModel;
   final ShareModel shareModel;
-  const ShareShowBidCustomerReceive(
+  const ShareShowInterestCustomerReceive(
       {Key? key, required this.shareCustomerModel, required this.shareModel})
       : super(key: key);
 
   @override
-  _ShareShowBidCustomerReceiveState createState() =>
-      _ShareShowBidCustomerReceiveState();
+  _ShareShowInterestCustomerReceiveState createState() =>
+      _ShareShowInterestCustomerReceiveState();
 }
 
-class _ShareShowBidCustomerReceiveState
-    extends State<ShareShowBidCustomerReceive> {
+class _ShareShowInterestCustomerReceiveState
+    extends State<ShareShowInterestCustomerReceive> {
   late ShareCustomerModel shareCustomerModel;
   late ShareModel shareModel;
   late List<ShareCustomerModel> shareCustomerModels;
@@ -44,10 +44,10 @@ class _ShareShowBidCustomerReceiveState
     shareModel = widget.shareModel;
     shareCustomerModels = context.read<ShareCustomerProvider>().shareCustomers;
     apiModel = context.read<ApiProvider>().api;
-    totalInterest = totalInterestReceive(
-        shareModel, shareCustomerModel, shareCustomerModels);
+    totalInterest = totalInterestReceive(shareModel, shareCustomerModel);
     last = lastReceive(shareModel, shareCustomerModel);
-    totalReceive = shareModel.principle + totalInterest - last;
+    totalReceive =
+        shareModel.principle + totalInterest - shareModel.pay! - last;
     if (shareCustomerModel.comment != null)
       commentController.text = shareCustomerModel.comment!;
   }
@@ -110,15 +110,15 @@ class _ShareShowBidCustomerReceiveState
                             'วันที่ : ${DateFormat('dd/MM/yyyy').format(shareCustomerModel.shareDate)}',
                             style: bigFont),
                         Text(
-                          'ดอกเบี้ย : ${shareCustomerModel.interest}',
+                          'รับดอกเบี้ยรวม : $totalInterest',
+                          style: bigFont,
+                        ),
+                        Text(
+                          'หักวันรับ : ${shareModel.pay}',
                           style: bigFont,
                         ),
                         Text(
                           'เงินต้น : ${shareModel.principle}',
-                          style: bigFont,
-                        ),
-                        Text(
-                          'รับดอกเบี้ยรวม : $totalInterest',
                           style: bigFont,
                         ),
                         if (shareModel.lastReceive == true)
@@ -184,23 +184,16 @@ class _ShareShowBidCustomerReceiveState
   }
 
   int totalInterestReceive(
-      ShareModel shareModel,
-      ShareCustomerModel shareCustomerModel,
-      List<ShareCustomerModel> shareCustomerModels) {
-    int interestTotal = 0;
-    for (int i = 0; i < shareCustomerModel.sequence - 1; i++) {
-      int interest = shareCustomerModels[i].interest == null
-          ? 0
-          : shareCustomerModels[i].interest!;
-      interestTotal += interest;
-    }
-    return interestTotal;
+    ShareModel shareModel,
+    ShareCustomerModel shareCustomerModel,
+  ) {
+    return shareModel.interestFix! * (shareCustomerModel.sequence - 2);
   }
 
   int lastReceive(
       ShareModel shareModel, ShareCustomerModel shareCustomerModel) {
     if (shareModel.lastReceive == true) {
-      return shareModel.pay! + shareCustomerModel.interest!;
+      return shareModel.pay! + shareModel.interestFix!;
     } else {
       return 0;
     }
@@ -284,12 +277,6 @@ class _ShareShowBidCustomerReceiveState
           )),
         )),
       );
-      // final Response response =
-      //     Provider.of<ShareCustomerProvider>(context, listen: false)
-      //         .updateComment(apiModel, shareModel, shareCustomerModel);
-      // if (response.statusCode == 201) {
-      //   //do some thing
-      // }
     }
   }
 }

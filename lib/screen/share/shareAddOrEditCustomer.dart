@@ -5,6 +5,7 @@ import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
+import 'package:flutter_share/screen/customer/customerAdd.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -88,11 +89,17 @@ class _EditShareCustomerCustomerState extends State<EditShareCustomerCustomer> {
                       noItemsFoundBuilder: (context) => Container(
                             height: 100,
                             child: Center(
+                                child: InkWell(
                               child: Text(
-                                'No Users Found.',
-                                style: TextStyle(fontSize: 24),
+                                'ไม่พบลูกค้าที่ระบุ\n คลิกที่นี่เพื่อสร้างลูกค้าใหม่.',
+                                style:
+                                    TextStyle(fontSize: 24, color: Colors.red),
                               ),
-                            ),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CustomerAdd())),
+                            )),
                           ),
                       onSuggestionSelected: (CustomerModel? customerModel) {
                         setState(() {

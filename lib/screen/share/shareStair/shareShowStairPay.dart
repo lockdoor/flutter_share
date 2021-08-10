@@ -3,25 +3,23 @@ import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
 import 'package:flutter_share/screen/capture.dart';
-import 'package:flutter_share/screen/share/shareFollowInterest/shareShowInterestCustomerReceive.dart';
+import 'package:flutter_share/screen/share/shareStair/shareShowStairCustomerReceive.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:intl/intl.dart';
 
-class ShareShowFollowInterestPay extends StatefulWidget {
+class ShareShowStairPay extends StatefulWidget {
   final ShareModel shareModel;
   final String title;
-  const ShareShowFollowInterestPay(
+  const ShareShowStairPay(
       {Key? key, required this.shareModel, required this.title})
       : super(key: key);
 
   @override
-  _ShareShowFollowInterestPayState createState() =>
-      _ShareShowFollowInterestPayState();
+  _ShareShowStairPayState createState() => _ShareShowStairPayState();
 }
 
-class _ShareShowFollowInterestPayState
-    extends State<ShareShowFollowInterestPay> {
+class _ShareShowStairPayState extends State<ShareShowStairPay> {
   late ShareModel shareModel;
   late List<ShareCustomerModel> shareCustomers;
   ScreenshotController screenshotController = ScreenshotController();
@@ -29,6 +27,7 @@ class _ShareShowFollowInterestPayState
   int? adminLastSequence;
   final DateTime yesterday = new DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day - 1);
+
   TextStyle shareDeath = TextStyle(color: Colors.red);
 
   @override
@@ -111,6 +110,17 @@ class _ShareShowFollowInterestPayState
     );
   }
 
+  // Widget showDate(ShareCustomerModel shareCustomerModel) {
+  //   if ((shareCustomerModel.sequence == adminFirstSequence ||
+  //           shareCustomerModel.sequence == adminLastSequence) ||
+  //       (shareCustomerModel.interest != null &&
+  //           shareCustomerModel.interest != 0)) {
+  //     return Text(DateFormat('dd/MM').format(shareCustomerModel.shareDate),
+  //         style: shareDeath);
+  //   } else {
+  //     return Text('');
+  //   }
+  // }
   Widget showDate(ShareCustomerModel shareCustomerModel) {
     if (shareCustomerModel.shareDate.isBefore(yesterday)) {
       return Text(
@@ -128,13 +138,28 @@ class _ShareShowFollowInterestPayState
       return Text('ท้าว');
     } else {
       if (shareCustomerModel.shareDate.isBefore(yesterday)) {
-        return Text('${shareModel.pay! + shareModel.interestFix!}',
-            style: shareDeath);
+        return Text(shareCustomerModel.interest.toString(), style: shareDeath);
       } else {
-        return Text('${shareModel.pay}');
+        return Text(shareCustomerModel.interest.toString());
       }
     }
   }
+
+  // Widget showName(ShareCustomerModel shareCustomerModel) {
+  //   if (shareCustomerModel.personName == null) {
+  //     return Text('');
+  //   } else if (shareCustomerModel.interest != null &&
+  //       shareCustomerModel.interest != 0) {
+  //     return Text(
+  //       shareCustomerModel.personName.toString(),
+  //       style: shareDeath,
+  //     );
+  //   } else {
+  //     return Text(
+  //       shareCustomerModel.personName.toString(),
+  //     );
+  //   }
+  // }
 
   Widget showName(ShareCustomerModel shareCustomerModel) {
     if (shareCustomerModel.personName == null) {
@@ -158,18 +183,14 @@ class _ShareShowFollowInterestPayState
       title: Row(
         children: [
           Expanded(flex: 1, child: showDate(shareCustomer)),
-          Expanded(
-            flex: 3,
-            child: showName(shareCustomer),
-          ),
+          Expanded(flex: 3, child: showName(shareCustomer)),
           Expanded(flex: 1, child: showPay(shareCustomer)),
         ],
       ),
       onTap: () {
-        if (shareCustomer.sequence != adminFirstSequence &&
-            shareCustomer.sequence != adminLastSequence) {
+        if (shareCustomer.interest != 0 && shareCustomer.interest != null) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ShareShowInterestCustomerReceive(
+            return ShareShowStairCustomerReceive(
                 shareCustomerModel: shareCustomer, shareModel: shareModel);
           }));
         }

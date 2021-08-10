@@ -3,6 +3,9 @@ import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
+import 'package:flutter_share/screen/share/shareStair/shareShowStairDetail.dart';
+import 'package:flutter_share/screen/share/shareStair/shareShowStairInterest.dart';
+import 'package:flutter_share/screen/share/shareStair/shareShowStairPay.dart';
 import 'package:provider/provider.dart';
 
 class ShareShowStairHome extends StatefulWidget {
@@ -53,21 +56,21 @@ class _ShareShowStairHomeState extends State<ShareShowStairHome> {
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowBidDetail();
+                    shareShowStairDetail();
                   });
                 },
                 icon: Icon(Icons.article)),
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowBidInterest();
+                    shareShowStairInterest();
                   });
                 },
                 icon: Icon(Icons.filter_vintage_sharp)),
             IconButton(
                 onPressed: () {
                   setState(() {
-                    shareShowBidPay();
+                    shareShowStairPay();
                   });
                 },
                 icon: Icon(Icons.person)),
@@ -77,29 +80,29 @@ class _ShareShowStairHomeState extends State<ShareShowStairHome> {
     );
   }
 
-  void shareShowBidDetail() {
+  void shareShowStairDetail() {
     title = 'รายละเอียด';
-    //myBody = ShareShowBidDetail(shareModel: shareModel, title: title);
+    myBody = ShareShowStairDetail(shareModel: shareModel, title: title);
   }
 
-  void shareShowBidInterest() {
+  void shareShowStairInterest() {
     title = 'ดอกเบี้ย';
-    // myBody = ShareShowBidInterest(
-    //   shareModel: this.shareModel,
-    //   title: this.title,
-    // );
+    myBody = ShareShowStairInterest(
+      shareModel: this.shareModel,
+      title: this.title,
+    );
   }
 
-  void shareShowBidPay() {
+  void shareShowStairPay() {
     title = 'เรตส่ง';
-    //myBody = ShareShowBidPay(shareModel: shareModel, title: title);
+    myBody = ShareShowStairPay(shareModel: shareModel, title: title);
   }
 
   void tabMyBody(tab) {
     if (tab == 1)
-      shareShowBidDetail();
+      shareShowStairDetail();
     else if (tab == 2)
-      shareShowBidInterest();
-    else if (tab == 3) shareShowBidPay();
+      shareShowStairInterest();
+    else if (tab == 3) shareShowStairPay();
   }
 }

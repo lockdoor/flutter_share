@@ -1,6 +1,3 @@
-//capture screenshot
-//https://www.youtube.com/watch?v=rABnaF-Xk3E
-
 import 'package:flutter/material.dart';
 import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/customer/customer.dart';
@@ -9,27 +6,25 @@ import 'package:flutter_share/models/share/shareCustomer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/shareCustomer.dart';
+import 'package:flutter_share/screen/capture.dart';
+import 'package:flutter_share/screen/share/shareAddOrEditCustomer.dart';
 import 'package:flutter_share/screen/share/shareAddOrEditInterest.dart';
-//import 'package:flutter_share/screen/share/shareBid/editInterest.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:intl/intl.dart';
 
-import '../../capture.dart';
-import '../shareAddOrEditCustomer.dart';
-
-class ShareShowBidInterest extends StatefulWidget {
-  final shareModel;
-  final title;
-  const ShareShowBidInterest(
+class ShareShowStairInterest extends StatefulWidget {
+  final ShareModel shareModel;
+  final String title;
+  const ShareShowStairInterest(
       {Key? key, required this.shareModel, required this.title})
       : super(key: key);
 
   @override
-  _ShareShowBidInterestState createState() => _ShareShowBidInterestState();
+  _ShareShowStairInterestState createState() => _ShareShowStairInterestState();
 }
 
-class _ShareShowBidInterestState extends State<ShareShowBidInterest> {
+class _ShareShowStairInterestState extends State<ShareShowStairInterest> {
   late ShareModel shareModel;
   late List<ShareCustomerModel> shareCustomerModelList;
   late List<CustomerModel> customers;
