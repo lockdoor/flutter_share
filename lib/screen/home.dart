@@ -7,6 +7,8 @@ import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/bank.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/providers/share.dart';
+import 'package:flutter_share/screen/home/homeNotify.dart';
+import 'package:flutter_share/screen/setting/checkCustomerPay.dart';
 import 'package:flutter_share/screen/setting/setting.dart';
 import 'package:flutter_share/screen/share/shareList.dart';
 import 'customer/customerList.dart';
@@ -61,12 +63,25 @@ class _HomeState extends State<Home> {
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
-                child: Text(
-                  'Drawer Header',
-                  style: TextStyle(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.account_circle,
                     color: Colors.white,
-                    fontSize: 24,
+                    size: 36,
                   ),
+                  title: this.admin == null
+                      ? Text(
+                          'กรุณาตั้งค่าท้าวแชร์',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        )
+                      : Text('ท้าวแชร์ : ' + this.admin!.nickName,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold)),
                 ),
               ),
               ListTile(
@@ -74,13 +89,15 @@ class _HomeState extends State<Home> {
                 title: Text('Messages'),
               ),
               ListTile(
-                leading: Icon(Icons.account_circle),
-                title: this.admin == null
-                    ? Text(
-                        'กรุณาตั้งค่าท้าวแชร์',
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : Text('ท้าวแชร์ : ' + this.admin!.nickName),
+                leading: Icon(Icons.money_rounded),
+                title: Text(
+                  'เช็คลูกค้าส่งแชร์',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CheckCustomerPay())),
               ),
               ListTile(
                   leading: Icon(Icons.settings),
@@ -128,7 +145,7 @@ class _HomeState extends State<Home> {
 
   void homeBody() {
     title = 'หน้าหลัก';
-    myBody = Scaffold();
+    myBody = HomeNotify();
   }
 
   void shareBody() {

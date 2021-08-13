@@ -25,6 +25,7 @@ class ShareCustomerModel {
   int? interest;
   bool locker;
   String? comment;
+  int? notPaid;
 
   ShareCustomerModel.fromJson(Map<String, dynamic> json)
       : sharesPersonsID = json["shares_persons_id"],
@@ -36,7 +37,8 @@ class ShareCustomerModel {
         sequence = json["sequence"],
         interest = json["interest"] == null ? null : json["interest"],
         locker = json["locker"] == 1 ? true : false,
-        comment = json["comment"] == null ? null : json['comment'];
+        comment = json["comment"] == null ? null : json["comment"],
+        notPaid = json["not_paid"] == null ? null : json["not_paid"];
 
   Map<String, dynamic> toJson() => {
         "shares_persons_id": sharesPersonsID,
@@ -123,6 +125,47 @@ class ShareCustomerModel {
         },
         body: jsonEncode(shareCustomerModel.toJson()));
     return response;
+  }
+
+  static getSharePersonByDateWithNotPaid(
+      ApiModel apiModel, ShareModel shareModel) async {
+    final response = await http
+        .post(
+            Uri.parse(apiModel.getApiUri() + 'api/share_person_with_not_paid'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer ' + apiModel.getToken()
+            },
+            body: jsonEncode({"share_id": shareModel.shareID.toString()}))
+        .then((response) => response.body)
+        .catchError((error) {
+      print(error);
+    });
+    //รอ  response
+    //print(response);
+    Iterable l = jsonDecode(response);
+    //print(l);
+
+    List<ShareCustomerModel> shareCustomer = List<ShareCustomerModel>.from(
+        l.map((model) => ShareCustomerModel.fromJson(model)));
+    return shareCustomer;
+  }
+
+  static getSharebyWeek(ApiModel apiModel) async {
+    final http.Response response = await http.get(
+      Uri.parse(apiModel.getApiUri() + 'api/get_share_by_week'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ' + apiModel.getToken()
+      },
+    ).then((http.Response response) => response);
+
+    Iterable l = jsonDecode(response.body);
+    //print(l);
+
+    List<ShareCustomerModel> shareCustomer = List<ShareCustomerModel>.from(
+        l.map((model) => ShareCustomerModel.fromJson(model)));
+    return shareCustomer;
   }
 }
 

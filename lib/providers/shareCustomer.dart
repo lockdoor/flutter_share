@@ -29,6 +29,11 @@ class ShareCustomerProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void getSharebyWeek(ApiModel apiModel) async {
+    shareCustomers = await ShareCustomerModel.getSharebyWeek(apiModel);
+    notifyListeners();
+  }
+
   addCustomerToShareCustomer(
       ApiModel apiModel, CustomerModel? customerModel, sequence) async {
     //print('sequence is ' + sequence.toString());
@@ -87,5 +92,12 @@ class ShareCustomerProvider with ChangeNotifier {
       return response;
     });
     return response;
+  }
+
+  void getSharePersonByDateWithNotPaid(
+      ApiModel apiModel, ShareModel shareModel) async {
+    shareCustomers = await ShareCustomerModel.getSharePersonByDateWithNotPaid(
+        apiModel, shareModel);
+    notifyListeners();
   }
 }
