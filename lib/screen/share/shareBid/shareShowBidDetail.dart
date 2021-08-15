@@ -3,6 +3,7 @@ import 'package:flutter_share/models/api.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/share.dart';
+import 'package:flutter_share/screen/home.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -139,6 +140,72 @@ class _ShareShowBidDetailState extends State<ShareShowBidDetail> {
                 title: shareModel.isOpen == true
                     ? Text('แชร์วงนี้เปิดอยู่')
                     : Text('แชร์วงนี้ปิดวงแล้ว'),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            scrollable: true,
+                            title: shareModel.isOpen == false
+                                ? Text('ยืนยันจะเปิดแชร์วงนี้')
+                                : Text('ยืนยันจะปิดแชร์วงนี้'),
+                            content: Container(
+                              child: Column(
+                                children: [
+                                  shareModel.isOpen == false
+                                      ? Text('เพื่อเป็นการยืนยันเปิดแชร์วงนี้')
+                                      : Text(
+                                          'เพื่อเป็นการยืนยันจะปิดแชร์วงนี้'),
+                                  Text(
+                                      'กรุณาพิมพ์ ${apiModel.inputSubmit} ในกล่องข้อความ'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: TextFormField(
+                                      controller: alertTextFrom,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          hintText:
+                                              'พิมพ์ข้อความ ${apiModel.inputSubmit} ที่นี่'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  if (alertTextFrom.text ==
+                                      apiModel.inputSubmit) {
+                                    setState(() {
+                                      canEdit = !canEdit;
+                                    });
+                                    alertTextFrom.clear();
+                                    Response response =
+                                        await Provider.of<ShareProvider>(
+                                                context,
+                                                listen: false)
+                                            .onOffShare(apiModel, shareModel);
+                                    if (response.statusCode == 201) {
+                                      _scaffoldKey.currentState!
+                                          .openEndDrawer();
+
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Home(tab: 2)));
+                                    }
+                                  }
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                },
               ),
               //แก้ไขแชร์
               ListTile(

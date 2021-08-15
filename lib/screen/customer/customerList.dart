@@ -4,6 +4,7 @@ import 'package:flutter_share/models/customer/customer.dart';
 import 'package:flutter_share/providers/api.dart';
 import 'package:flutter_share/providers/customers.dart';
 import 'package:flutter_share/screen/customer/customerAdd.dart';
+import 'package:flutter_share/screen/customer/customerDetail.dart';
 import 'package:provider/provider.dart';
 
 /* วิดเจด รายชื่อลูกค้า */
@@ -37,6 +38,11 @@ class _CustomerListState extends State<CustomerList> {
                     child: Text(customers[index].personID.toString()),
                   ),
                   title: Text(customers[index].nickName),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerDetail(
+                              customerModel: customers.elementAt(index)))),
                 );
               });
         },

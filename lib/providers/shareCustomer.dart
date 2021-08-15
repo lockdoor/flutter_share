@@ -8,7 +8,8 @@ import 'package:http/http.dart';
 
 class ShareCustomerProvider with ChangeNotifier {
   List<ShareCustomerModel> shareCustomers = [];
-
+  List<ShareCustomerModel> sharesByCustomer = [];
+  List<ShareCustomerModel> sharesNoPaid = [];
   List<ShareCustomerModel> shareCusconersNoLocker = [];
   List<ShareCustomerModel> getSuggestions(String query) =>
       List.of(this.shareCusconersNoLocker).where((shareCustomer) {
@@ -26,6 +27,13 @@ class ShareCustomerProvider with ChangeNotifier {
   void initData(ApiModel apiModel, ShareModel shareModel) async {
     shareCustomers =
         await ShareCustomerModel.getAllShareCustomer(apiModel, shareModel);
+    notifyListeners();
+  }
+
+  void getShareOpenByCustomer(
+      ApiModel apiModel, CustomerModel customerModel) async {
+    sharesByCustomer = await ShareCustomerModel.getShareOpenByCustomer(
+        apiModel, customerModel);
     notifyListeners();
   }
 
@@ -96,7 +104,7 @@ class ShareCustomerProvider with ChangeNotifier {
 
   void getSharePersonByDateWithNotPaid(
       ApiModel apiModel, ShareModel shareModel) async {
-    shareCustomers = await ShareCustomerModel.getSharePersonByDateWithNotPaid(
+    sharesNoPaid = await ShareCustomerModel.getSharePersonByDateWithNotPaid(
         apiModel, shareModel);
     notifyListeners();
   }

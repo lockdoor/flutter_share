@@ -7,8 +7,8 @@ import 'package:flutter_share/providers/share.dart';
 import 'package:flutter_share/screen/share/shareAdd.dart';
 import 'package:flutter_share/screen/share/shareBid/shareShowBidHome.dart';
 import 'package:flutter_share/screen/share/shareFollowInterest/shareShowFollowInterestHome.dart';
+//import 'package:flutter_share/screen/share/shareListCard.dart';
 import 'package:flutter_share/screen/share/shareStair/shareShowStairHome.dart';
-//import 'package:flutter_share/screen/share/shareBid/shareShowBidInterrest.dart';
 import 'package:provider/provider.dart';
 
 class ShareList extends StatefulWidget {
@@ -32,13 +32,13 @@ class _ShareListState extends State<ShareList> {
     return Scaffold(
       body: Consumer(
         builder: (context, ShareProvider provider, child) {
-          final List<ShareModel> shares = context.watch<ShareProvider>().shares;
+          final List<ShareModel> shares = provider.shares;
           return GridView.builder(
             itemCount: shares.length,
             gridDelegate:
                 SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemBuilder: (context, index) {
-              return myCard(index, provider.shares[index]);
+              return myCard(index, shares[index]);
             },
           );
         },
@@ -106,7 +106,7 @@ class _ShareListState extends State<ShareList> {
             ),
             onTap: () {
               Navigator.push(context, shareSelectRoute(share));
-              print('from share list share id is ' + share.shareID.toString());
+              //print('from share list share id is ' + share.shareID.toString());
             },
           ),
         ));

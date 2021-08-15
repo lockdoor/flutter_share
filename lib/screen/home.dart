@@ -11,6 +11,7 @@ import 'package:flutter_share/screen/home/homeNotify.dart';
 import 'package:flutter_share/screen/setting/checkCustomerPay.dart';
 import 'package:flutter_share/screen/setting/setting.dart';
 import 'package:flutter_share/screen/share/shareList.dart';
+import 'package:flutter_share/screen/share/shareListNoOpen.dart';
 import 'customer/customerList.dart';
 import 'package:provider/provider.dart';
 
@@ -98,6 +99,15 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CheckCustomerPay())),
+              ),
+              ListTile(
+                leading: Icon(Icons.update_disabled),
+                title: Text(
+                  'วงแชร์ที่ปิดไปแล้ว',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ShareListNoOpen())),
               ),
               ListTile(
                   leading: Icon(Icons.settings),

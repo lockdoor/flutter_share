@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_share/models/api.dart';
-//import 'package:flutter_share/models/customer/customer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -118,6 +117,38 @@ class ShareModel {
           "shareModelOld": shareModelOld.toJson()
         }));
     return response;
+  }
+
+  static onOffShare(ApiModel apiModel, ShareModel shareModel) async {
+    final http.Response response =
+        await http.post(Uri.parse(apiModel.getApiUri() + 'api/share_on_off'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer ' + apiModel.getToken()
+            },
+            body: jsonEncode(shareModel.toJson()));
+    print(response.statusCode);
+    return response;
+  }
+
+  static getShareNoOpen(ApiModel apiModel) async {
+    final http.Response response = await http
+        .get(
+          Uri.parse(apiModel.getApiUri() + 'api/shares_no_open'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer ' + apiModel.getToken()
+          },
+        )
+        .then((response) => response)
+        .catchError((error) {
+          throw Exception('failed to connect database');
+        });
+    //print(response);
+    Iterable l = json.decode(response.body);
+    List<ShareModel> shares =
+        List<ShareModel>.from(l.map((model) => ShareModel.fromJson(model)));
+    return shares;
   }
 }
 

@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:flutter_share/models/api.dart';
+import 'package:flutter_share/models/customer/customer.dart';
 //import 'package:flutter_share/models/customer/customer.dart';
 import 'package:flutter_share/models/share/share.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +27,7 @@ class ShareCustomerModel {
   bool locker;
   String? comment;
   int? notPaid;
+  String? shareName;
 
   ShareCustomerModel.fromJson(Map<String, dynamic> json)
       : sharesPersonsID = json["shares_persons_id"],
@@ -38,7 +40,8 @@ class ShareCustomerModel {
         interest = json["interest"] == null ? null : json["interest"],
         locker = json["locker"] == 1 ? true : false,
         comment = json["comment"] == null ? null : json["comment"],
-        notPaid = json["not_paid"] == null ? null : json["not_paid"];
+        notPaid = json["not_paid"] == null ? null : json["not_paid"],
+        shareName = json["share_name"] == null ? null : json["share_name"];
 
   Map<String, dynamic> toJson() => {
         "shares_persons_id": sharesPersonsID,
@@ -160,6 +163,23 @@ class ShareCustomerModel {
       },
     ).then((http.Response response) => response);
 
+    Iterable l = jsonDecode(response.body);
+    //print(l);
+
+    List<ShareCustomerModel> shareCustomer = List<ShareCustomerModel>.from(
+        l.map((model) => ShareCustomerModel.fromJson(model)));
+    return shareCustomer;
+  }
+
+  static getShareOpenByCustomer(
+      ApiModel apiModel, CustomerModel customerModel) async {
+    final http.Response response = await http.post(
+        Uri.parse(apiModel.getApiUri() + 'api/share_person_with_person'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + apiModel.getToken()
+        },
+        body: jsonEncode(customerModel.toJson()));
     Iterable l = jsonDecode(response.body);
     //print(l);
 

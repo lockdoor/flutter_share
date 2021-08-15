@@ -126,7 +126,7 @@ class _ListDateSharePayState extends State<ListDateSharePay> {
     return Consumer(
       builder: (BuildContext context, ShareCustomerProvider provider,
           Widget? child) {
-        List<ShareCustomerModel> shareCustomerModels = provider.shareCustomers;
+        List<ShareCustomerModel> shareCustomerModels = provider.sharesNoPaid;
         return Scaffold(
             appBar: AppBar(
               title: Row(
